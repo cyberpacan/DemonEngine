@@ -1,8 +1,10 @@
-
-#include <iostream>
+#define GLFW_INCLUDE_NONE
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <DemonEngineCore/Application.hpp>
+
 using namespace std;
+
 namespace DemonEngine
 {
 	Application::Application()
@@ -16,7 +18,7 @@ namespace DemonEngine
 
 	int Application::Start(unsigned int winWidth, unsigned int winHeight, const char* winTitle)
 	{
-        cout << "Hello from App" << endl;
+        
         GLFWwindow* window;
 
         /* Initialize the library */
@@ -34,11 +36,18 @@ namespace DemonEngine
         /* Make the window's context current */
         glfwMakeContextCurrent(window);
 
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            return -1;
+        }
+
+        glClearColor(1, 1, 0, 0);
+
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
-            //glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);

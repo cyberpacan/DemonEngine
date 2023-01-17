@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace DemonEngine
 {
 	class Application
@@ -17,6 +19,10 @@ namespace DemonEngine
         void Close();
 
         virtual void onUpdate() {}
+
+
+    private:
+        std::unique_ptr<class Window> m_pWindow;
 
 	};
 }
