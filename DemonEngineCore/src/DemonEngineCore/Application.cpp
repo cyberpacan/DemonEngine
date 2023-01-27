@@ -1,66 +1,47 @@
-#define GLFW_INCLUDE_NONE
+#include "DemonEngineCore/Application.hpp"
+#include "DemonEngineCore/Window.hpp"
+#include "DemonEngineCore/Logger.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <DemonEngineCore/Application.hpp>
 
-using namespace std;
+
+
+#include <iostream>
 
 namespace DemonEngine
 {
-	Application::Application()
-	{
 
-	}
-	Application::~Application()
-	{
+    Application::Application()
+    {
+        INFO("Starting Application");
+    }
 
-	}
 
-	int Application::Start(unsigned int winWidth, unsigned int winHeight, const char* winTitle)
-	{
+    Application::~Application()
+    {
+
+        INFO("Closing Application");
+    }
+
+
+    int Application::start(unsigned int window_width, unsigned int window_height, const char* title)
+    {
+        m_pWindow = std::make_unique<Window>(title, window_width, window_height);
+        m_pWindow->setEventCallback(
+            [](Event& event)
+            {
+                INFO("[EVENT] Changed size to {0}x{1}", event.width, event.height);
+            }
+        );
         
-        GLFWwindow* window;
 
-        /* Initialize the library */
-        if (!glfwInit())
-            return -1;
-
-        /* Create a windowed mode window and its OpenGL context */
-        window = glfwCreateWindow(winWidth, winHeight, winTitle, NULL, NULL);
-        if (!window)
+        while (true)
         {
-            glfwTerminate();
-            return -1;
-        }
-
-        /* Make the window's context current */
-        glfwMakeContextCurrent(window);
-
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        {
-            return -1;
-        }
-
-        glClearColor(1, 1, 0, 0);
-
-        /* Loop until the user closes the window */
-        while (!glfwWindowShouldClose(window))
-        {
-            /* Render here */
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            /* Swap front and back buffers */
-            glfwSwapBuffers(window);
-
-            /* Poll for and process events */
-            glfwPollEvents();
-
+            m_pWindow->onUpdate();
             onUpdate();
         }
-
-        glfwTerminate();
         return 0;
-	}
-
-	
+        
+    }
 }
