@@ -1,30 +1,26 @@
-//#include <iostream>
-#include <Windows.h>
+#include <iostream>
 #include <memory>
+
 #include <DemonEngineCore/Application.hpp>
 
-using namespace std;
-using namespace DemonEngine;
-
-
-
-class MyApp : public Application
+class MyApp : public DemonEngine::Application
 {
+    virtual void onUpdate() override
+    {
+        //    std::cout << "Update frame: " << frame++ << std::endl;
+    }
 
-	virtual void onUpdate() override
-	{
-		//cout << "Frame updating: " << ++frame << endl;
-	}
-
-	int frame = 0;
+    //int frame = 0;
 };
+
 
 int main()
 {
-	
-	
-	auto myApp = make_unique<MyApp>();
-	int returnCode = myApp->Start(1024, 1024, "DemonEngine Editor");
-	return returnCode;
-	//std::cin.get();
+    auto myApp = std::make_unique<MyApp>();
+
+    int returnCode = myApp->start(1024, 760, "My first App");
+
+    //std::cin.get();
+
+    return returnCode;
 }

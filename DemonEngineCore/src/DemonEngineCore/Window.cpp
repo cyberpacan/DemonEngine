@@ -4,6 +4,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+
+
 namespace DemonEngine {
 
     static bool s_GLFW_initialized = false;
@@ -12,6 +17,11 @@ namespace DemonEngine {
         m_data({ std::move(title), width, height })
     {
         int resultCode = init();
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGui_ImplOpenGL3_Init();
+        ImGui_ImplGlfw_InitForOpenGL(m_pWindow, true);
     }
 
     Window::~Window()
@@ -78,8 +88,27 @@ namespace DemonEngine {
 
     void Window::onUpdate()
     {
-        glClearColor(1, 0, 0, 0);
+        glClearColor(m_bgc[0], m_bgc[1], m_bgc[2], m_bgc[3]);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGuiIO& IO = ImGui::GetIO();
+        IO.DisplaySize.x = static_cast<float>(get_width());
+        IO.DisplaySize.y = static_cast<float>(get_height());
+
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::Begin("BGC WIN");
+        ImGui::ColorEdit4("BGC", m_bgc);
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+       
+
         glfwSwapBuffers(m_pWindow);
         glfwPollEvents();
     }
