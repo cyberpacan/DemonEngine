@@ -48,7 +48,7 @@ namespace DemonEngine {
 
         GLFWwindow* m_pWindow = nullptr;
         WindowData m_data;
-        float m_bgc[4] = {1.f, 0.f, 0.f, 0.f};
+        float m_bgc[4] = { 0.33f, 0.33f, 0.33f, 0.f };
     };
 
 }
