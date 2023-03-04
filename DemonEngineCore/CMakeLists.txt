@@ -13,13 +13,16 @@ set(ENGINE_PRIVATE_INCLUDES
 	src/DemonEngineCore/Window.hpp
 	src/DemonEngineCore/Render/OpenGL/Shader.hpp
 	src/DemonEngineCore/Render/OpenGL/VertexBuffer.hpp
+	src/DemonEngineCore/Render/OpenGL/VertexArray.hpp
 )
+
 
 set(ENGINE_PRIVATE_SOURCES
 	src/DemonEngineCore/Application.cpp
 	src/DemonEngineCore/Window.cpp	
 	src/DemonEngineCore/Render/OpenGL/Shader.cpp
 	src/DemonEngineCore/Render/OpenGL/VertexBuffer.cpp
+	src/DemonEngineCore/Render/OpenGL/VertexArray.cpp
 )
 
 set(ENGINE_ALL_SOURCES

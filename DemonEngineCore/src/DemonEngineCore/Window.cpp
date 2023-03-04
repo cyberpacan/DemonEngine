@@ -2,6 +2,7 @@
 #include "DemonEngineCore/Logger.hpp"
 #include "DemonEngineCore/Render/OpenGL/Shader.hpp"
 #include "DemonEngineCore/Render/OpenGL/VertexBuffer.hpp"
+#include "DemonEngineCore/Render/OpenGL/VertexArray.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -50,7 +51,7 @@ namespace DemonEngine {
     std::unique_ptr<Shader> p_shader;
     std::unique_ptr<VertexBuffer> p_points_vbo;
     std::unique_ptr<VertexBuffer> p_colors_vbo;
-    GLuint VAO;
+    std::unique_ptr<VertexArray> p_vao;
 
 
     Window::Window(std::string title, const unsigned int width, const unsigned int height):
@@ -132,17 +133,10 @@ namespace DemonEngine {
 
         p_points_vbo = std::make_unique<VertexBuffer>(points, sizeof(points));
         p_colors_vbo = std::make_unique<VertexBuffer>(colors, sizeof(colors));
+        p_vao = std::make_unique<VertexArray>();
 
-        glGenVertexArrays(1, &VAO);
-        glBindVertexArray(VAO);
-
-        glEnableVertexAttribArray(0);
-        p_points_vbo->bind();
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-        glEnableVertexAttribArray(1);
-        p_points_vbo->bind();
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        p_vao->addBuffer(*p_points_vbo);
+        p_vao->addBuffer(*p_colors_vbo);
 
         return 0;
     }
@@ -160,7 +154,7 @@ namespace DemonEngine {
 
 
         p_shader->bind();
-        glBindVertexArray(VAO);
+        p_vao->bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
 
