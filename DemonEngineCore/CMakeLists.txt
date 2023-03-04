@@ -12,12 +12,14 @@ set(ENGINE_PUBLIC_INCLUDES
 set(ENGINE_PRIVATE_INCLUDES
 	src/DemonEngineCore/Window.hpp
 	src/DemonEngineCore/Render/OpenGL/Shader.hpp
+	src/DemonEngineCore/Render/OpenGL/VertexBuffer.hpp
 )
 
 set(ENGINE_PRIVATE_SOURCES
 	src/DemonEngineCore/Application.cpp
 	src/DemonEngineCore/Window.cpp	
 	src/DemonEngineCore/Render/OpenGL/Shader.cpp
+	src/DemonEngineCore/Render/OpenGL/VertexBuffer.cpp
 )
 
 set(ENGINE_ALL_SOURCES
