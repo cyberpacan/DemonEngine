@@ -25,10 +25,10 @@ namespace DemonEngine
     }
 
 
-    int Application::start(unsigned int window_width, unsigned int window_height, const char* title)
+    int Application::start(unsigned int windowWidth, unsigned int windowHeight, const char* title)
     {
-        m_pWindow = std::make_unique<Window>(title, window_width, window_height);
-        m_pWindow->setEventCallback(
+        mPWindow = std::make_unique<Window>(title, windowWidth, windowHeight);
+        mPWindow->setEventCallback(
             [](Event& event)
             {
                 INFO("[EVENT] Changed size to {0}x{1}", event.width, event.height);
@@ -38,7 +38,7 @@ namespace DemonEngine
 
         while (true)
         {
-            m_pWindow->onUpdate();
+            mPWindow->onUpdate();
             onUpdate();
         }
         return 0;

@@ -26,10 +26,10 @@ namespace DemonEngine
     }
 
 
-    Shader::Shader(const char* vertexShaderSRC, const char* fragmentShaderSRC)
+    Shader::Shader(const char* vertexShaderSrc, const char* fragmentShaderSrc)
     {
         GLuint vertexShaderID = 0;
-        if (!createShader(vertexShaderSRC, GL_VERTEX_SHADER, vertexShaderID))
+        if (!createShader(vertexShaderSrc, GL_VERTEX_SHADER, vertexShaderID))
         {
             CRITICAL("VERTEX SHADER: compile time error!");
             glDeleteShader(vertexShaderID);
@@ -37,7 +37,7 @@ namespace DemonEngine
         }
 
         GLuint fragmentShaderID = 0;
-        if (!createShader(fragmentShaderSRC, GL_FRAGMENT_SHADER, fragmentShaderID))
+        if (!createShader(fragmentShaderSrc, GL_FRAGMENT_SHADER, fragmentShaderID))
         {
             CRITICAL("FRAGMENT SHADER: compile time error!");
             glDeleteShader(vertexShaderID);
@@ -45,43 +45,43 @@ namespace DemonEngine
             return;
         }
 
-        m_id = glCreateProgram();
-        glAttachShader(m_id, vertexShaderID);
-        glAttachShader(m_id, fragmentShaderID);
-        glLinkProgram(m_id);
+        mID = glCreateProgram();
+        glAttachShader(mID, vertexShaderID);
+        glAttachShader(mID, fragmentShaderID);
+        glLinkProgram(mID);
 
         GLint success;
-        glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+        glGetProgramiv(mID, GL_LINK_STATUS, &success);
         if (success == GL_FALSE)
         {
             GLchar infoLog[1024];
-            glGetProgramInfoLog(m_id, 1024, nullptr, infoLog);
+            glGetProgramInfoLog(mID, 1024, nullptr, infoLog);
             CRITICAL("SHADER: link time error: {0}", infoLog);
-            glDeleteProgram(m_id);
-            m_id = 0;
+            glDeleteProgram(mID);
+            mID = 0;
             glDeleteShader(vertexShaderID);
             glDeleteShader(fragmentShaderID);
             return;
         }
         else
         {
-            m_isCompiled = true;
+            mIsCompiled = true;
         }
 
-        glDetachShader(m_id, vertexShaderID);
-        glDetachShader(m_id, fragmentShaderID);
+        glDetachShader(mID, vertexShaderID);
+        glDetachShader(mID, fragmentShaderID);
         glDeleteShader(vertexShaderID);
         glDeleteShader(fragmentShaderID);
     }
 
     Shader::~Shader()
     {
-        glDeleteProgram(m_id);
+        glDeleteProgram(mID);
     }
 
     void   Shader::bind() const
     {
-        glUseProgram(m_id);
+        glUseProgram(mID);
     }
 
     void   Shader::unbind()
@@ -89,23 +89,23 @@ namespace DemonEngine
         glUseProgram(0);
     }
 
-    Shader& Shader::operator=(Shader&& shaderProg)
+    Shader& Shader::operator=(Shader&& shaderProg) 
     {
-        glDeleteProgram(m_id);
-        m_id = shaderProg.m_id;
-        m_isCompiled = shaderProg.m_isCompiled;
+        glDeleteProgram(mID);
+        mID = shaderProg.mID;
+        mIsCompiled = shaderProg.mIsCompiled;
 
-        shaderProg.m_id = 0;
-        shaderProg.m_isCompiled = false;
+        shaderProg.mID = 0;
+        shaderProg.mIsCompiled = false;
         return *this;
     }
 
-    Shader::Shader(Shader&& shaderProg)
+    Shader::Shader(Shader&& shaderProg) 
     {
-        m_id = shaderProg.m_id;
-        m_isCompiled = shaderProg.m_isCompiled;
+        mID = shaderProg.mID;
+        mIsCompiled = shaderProg.mIsCompiled;
 
-        shaderProg.m_id = 0;
-        shaderProg.m_isCompiled = false;
+        shaderProg.mID = 0;
+        shaderProg.mIsCompiled = false;
     }
 }

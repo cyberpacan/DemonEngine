@@ -5,7 +5,7 @@ namespace DemonEngine {
     class Shader
     {
     public:
-        Shader(const char* vertex_shader_src, const char* fragment_shader_src);
+        Shader(const char* vertexShaderSrc, const char* fragmentShaderSrc);
         Shader(Shader&&);
         Shader& operator=(Shader&&);
         ~Shader();
@@ -16,11 +16,11 @@ namespace DemonEngine {
 
         void bind() const;
         static void unbind();
-        bool isCompiled() const { return m_isCompiled; }
+        bool isCompiled() const { return mIsCompiled; }
 
     private:
-        bool m_isCompiled = false;
-        unsigned int m_id = 0;
+        bool mIsCompiled = false;
+        unsigned int mID = 0;
     };
 
 }

@@ -14,6 +14,7 @@ set(ENGINE_PRIVATE_INCLUDES
 	src/DemonEngineCore/Render/OpenGL/Shader.hpp
 	src/DemonEngineCore/Render/OpenGL/VertexBuffer.hpp
 	src/DemonEngineCore/Render/OpenGL/VertexArray.hpp
+	src/DemonEngineCore/Render/OpenGL/IndexBuffer.hpp
 )
 
 
@@ -23,6 +24,7 @@ set(ENGINE_PRIVATE_SOURCES
 	src/DemonEngineCore/Render/OpenGL/Shader.cpp
 	src/DemonEngineCore/Render/OpenGL/VertexBuffer.cpp
 	src/DemonEngineCore/Render/OpenGL/VertexArray.cpp
+	src/DemonEngineCore/Render/OpenGL/IndexBuffer.cpp
 )
 
 set(ENGINE_ALL_SOURCES

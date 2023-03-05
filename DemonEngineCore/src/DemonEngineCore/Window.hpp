@@ -24,13 +24,13 @@ namespace DemonEngine {
         Window& operator=(Window&&) = delete;
 
         void onUpdate();
-        unsigned int get_width() const { return m_data.width; }
-        unsigned int get_height() const { return m_data.height; }
+        unsigned int getWidth() const { return mData.width; }
+        unsigned int getHeight() const { return mData.height; }
 
 
         void setEventCallback(const EventCallback& callback)
         {
-            m_data.eventCallback = callback;
+            mData.eventCallback = callback;
         }
 
     private:
@@ -46,9 +46,9 @@ namespace DemonEngine {
         int init();
         void shutdown();
 
-        GLFWwindow* m_pWindow = nullptr;
-        WindowData m_data;
-        float m_bgc[4] = { 0.33f, 0.33f, 0.33f, 0.f };
+        GLFWwindow* mPWindow = nullptr;
+        WindowData mData;
+        float mBGC[4] = { 0.33f, 0.33f, 0.33f, 0.f };
     };
 
 }
