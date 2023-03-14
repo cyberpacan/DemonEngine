@@ -1,7 +1,7 @@
 #include "Shader.hpp"
 
 #include "DemonEngineCore/Logger.hpp"
-
+#include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 
 namespace DemonEngine
@@ -107,5 +107,10 @@ namespace DemonEngine
 
         shaderProg.mID = 0;
         shaderProg.mIsCompiled = false;
+    }
+
+    void Shader::setMatrix4(const char* name, const glm::mat4& matrix) const
+    {
+        glUniformMatrix4fv(glGetUniformLocation(mID, name), 1, GL_FALSE, glm::value_ptr(matrix));
     }
 }

@@ -5,6 +5,9 @@
 #include "DemonEngineCore/Render/OpenGL/VertexArray.hpp"
 #include "DemonEngineCore/Render/OpenGL/IndexBuffer.hpp"
 
+#include <glm/mat3x3.hpp>
+#include <glm/trigonometric.hpp>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -33,10 +36,11 @@ namespace DemonEngine {
         R"(#version 330 core
         layout(location = 0) in vec4 vertexPos;
         layout(location = 1) in vec4 vertexColor;
+        uniform mat4 modelMat;
         out vec4 color;
         void main() {
            color = vertexColor;
-           gl_Position = vec4(vertexPos);
+           gl_Position = modelMat * vec4(vertexPos);
         })";
 
     const char* fragmentShader =
@@ -53,6 +57,10 @@ namespace DemonEngine {
     std::unique_ptr<VertexBuffer> pPositionColorVBO;
     std::unique_ptr<IndexBuffer> pIndexBuffer;
     std::unique_ptr<VertexArray> pVAO;
+
+    float scale[3] = { 1.f, 1.f, 1.f };
+    float rotate = 0.f;
+    float translate[3] = { 0.f, 0.f, 0.f };
 
 
     Window::Window(std::string title, const unsigned int width, const unsigned int height):
@@ -181,11 +189,36 @@ namespace DemonEngine {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
 
-        //ImGui::ShowDemoWindow();
 
         ImGui::Begin("BackGroundColor WINDOW");
         ImGui::ColorEdit4("BackGroundColor", mBGC);
+
+        ImGui::SliderFloat3("scale", scale, 0.f, 2.f);
+        ImGui::SliderFloat("rotate", &rotate, 0.f, 360.f);
+        ImGui::SliderFloat3("translate", translate, -1.f, 1.f);
+
         pShader->bind();
+
+        glm::mat4 scaleMat(scale[0], 0, 0, 0,
+                            0, scale[1], 0, 0,
+                            0, 0, scale[2], 0,
+                            0, 0, 0, 1);
+
+        float rotate_in_radians = glm::radians(rotate);
+        glm::mat4 rotateMat(cos(rotate_in_radians), sin(rotate_in_radians), 0, 0,
+            -sin(rotate_in_radians), cos(rotate_in_radians), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+
+        glm::mat4 translateMat(1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            translate[0], translate[1], translate[2], 1);
+
+        glm::mat4 modelMat = translateMat * rotateMat * scaleMat;
+        pShader->setMatrix4("modelMat", modelMat);
+
+
         pVAO->bind();
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(pVAO->getIndicesCount()), GL_UNSIGNED_INT, nullptr);
         
