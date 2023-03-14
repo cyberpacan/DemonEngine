@@ -4,6 +4,7 @@
 #include "DemonEngineCore/Render/OpenGL/VertexBuffer.hpp"
 #include "DemonEngineCore/Render/OpenGL/VertexArray.hpp"
 #include "DemonEngineCore/Render/OpenGL/IndexBuffer.hpp"
+#include "DemonEngineCore/Camera.hpp"
 
 #include <glm/mat3x3.hpp>
 #include <glm/trigonometric.hpp>
@@ -16,8 +17,9 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 
 
-namespace DemonEngine {
 
+namespace DemonEngine {
+    
     static bool sInitializedGLFW = false;
 
     
@@ -29,7 +31,7 @@ namespace DemonEngine {
     };
 
     GLuint indices[] = {
-        0, 1, 2, 3, 2, 1
+        0, 1, 2, 3, 2, 1 
     };
 
     const char* vertexShader =
@@ -37,10 +39,11 @@ namespace DemonEngine {
         layout(location = 0) in vec4 vertexPos;
         layout(location = 1) in vec4 vertexColor;
         uniform mat4 modelMat;
+        uniform mat4 viewProjectionMat;
         out vec4 color;
         void main() {
            color = vertexColor;
-           gl_Position = modelMat * vec4(vertexPos);
+           gl_Position = viewProjectionMat * modelMat * vec4(vertexPos);
         })";
 
     const char* fragmentShader =
@@ -61,6 +64,11 @@ namespace DemonEngine {
     float scale[3] = { 1.f, 1.f, 1.f };
     float rotate = 0.f;
     float translate[3] = { 0.f, 0.f, 0.f };
+
+    float cameraPosition[3] = { 0.f, 0.f, 1.f };
+    float cameraRotation[3] = { 0.f, 0.f, 0.f };
+    bool perspectiveCamera = false;
+    Camera camera;
 
 
     Window::Window(std::string title, const unsigned int width, const unsigned int height):
@@ -197,6 +205,10 @@ namespace DemonEngine {
         ImGui::SliderFloat("rotate", &rotate, 0.f, 360.f);
         ImGui::SliderFloat3("translate", translate, -1.f, 1.f);
 
+        ImGui::SliderFloat3("camera position", cameraPosition, -10.f, 10.f);
+        ImGui::SliderFloat3("camera rotation", cameraRotation, 0, 360.f);
+        ImGui::Checkbox("Perspective camera", &perspectiveCamera);
+
         pShader->bind();
 
         glm::mat4 scaleMat(scale[0], 0, 0, 0,
@@ -217,6 +229,13 @@ namespace DemonEngine {
 
         glm::mat4 modelMat = translateMat * rotateMat * scaleMat;
         pShader->setMatrix4("modelMat", modelMat);
+
+        camera.setPositionRotation(glm::vec3(cameraPosition[0], cameraPosition[1], cameraPosition[2]),
+            glm::vec3(cameraRotation[0], cameraRotation[1], cameraRotation[2]));
+
+        camera.setProjectionMode(perspectiveCamera ? Camera::ProjectionMode::Perspective : Camera::ProjectionMode::Orthographic);
+
+        pShader->setMatrix4("viewProjectionMat", camera.getProjectionMatrix() * camera.getViewMatrix());
 
 
         pVAO->bind();

@@ -7,6 +7,7 @@ set(ENGINE_PUBLIC_INCLUDES
 	includes/DemonEngineCore/Application.hpp
 	includes/DemonEngineCore/Event.hpp
 	includes/DemonEngineCore/Logger.hpp
+	includes/DemonEngineCore/Camera.hpp
 )
 
 set(ENGINE_PRIVATE_INCLUDES
@@ -15,6 +16,7 @@ set(ENGINE_PRIVATE_INCLUDES
 	src/DemonEngineCore/Render/OpenGL/VertexBuffer.hpp
 	src/DemonEngineCore/Render/OpenGL/VertexArray.hpp
 	src/DemonEngineCore/Render/OpenGL/IndexBuffer.hpp
+	src/DemonEngineCore/Camera.cpp
 )
 
 
